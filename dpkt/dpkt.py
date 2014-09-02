@@ -140,15 +140,22 @@ class Packet(object):
         return True
 
     def has_layer(self, type_):
+        layer = self.get_layer(type_)
+        if layer is not None:
+            return layer
+        return False
+
+    def get_layer(self, type_):
         layer = self
         while True:
             if type(layer) == type_:
-                return True
+                return layer
             try:
                 layer = layer.data
             except AttributeError:
                 break
-        return False
+        return None
+
 
 # XXX - ''.join([(len(`chr(x)`)==3) and chr(x) or '.' for x in range(256)])
 __vis_filter = """................................ !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[.]^_`abcdefghijklmnopqrstuvwxyz{|}~................................................................................................................................."""
