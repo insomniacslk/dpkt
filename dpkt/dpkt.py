@@ -140,21 +140,28 @@ class Packet(object):
         return True
 
     def has_layer(self, type_):
-        layer = self.get_layer(type_)
-        if layer is not None:
-            return layer
+        for layer in self.layers():
+            if type(layer) == type_:
+                return True
         return False
 
     def get_layer(self, type_):
-        layer = self
-        while True:
+        for layer in self.layers():
             if type(layer) == type_:
                 return layer
-            try:
-                layer = layer.data
-            except AttributeError:
-                break
         return None
+
+    def layers(self):
+        layer = self
+        while True:
+            if isinstance(layer, Packet):
+                yield layer
+                try:
+                    layer = layer.data
+                except AttributeError:
+                    break
+            else:
+                break
 
 
 # XXX - ''.join([(len(`chr(x)`)==3) and chr(x) or '.' for x in range(256)])
