@@ -128,6 +128,17 @@ class Packet(object):
             setattr(self, k, v)
         self.data = buf[self.__hdr_len__:]
 
+    def compare(self, other):
+        """
+        Make a semantic comparison of two Packet instances
+        """
+        if not isinstance(other, type(self)):
+            return False
+        for key, _, _ in self.__hdr__:
+            if getattr(self, key) != getattr(other, key):
+                return False
+        return True
+
 # XXX - ''.join([(len(`chr(x)`)==3) and chr(x) or '.' for x in range(256)])
 __vis_filter = """................................ !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[.]^_`abcdefghijklmnopqrstuvwxyz{|}~................................................................................................................................."""
 
